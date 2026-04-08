@@ -1,7 +1,3 @@
-//console.log("Hello world");
-
-let getComputerChoice;
-let getHumanChoice;
 let paper = "Paper";
 let rock = "Rock";
 let scissor = "Scissor";
@@ -9,79 +5,82 @@ let humanScore = 0;
 let computerScore = 0;
 let computerWon = "Computer won," + " " + "Computer Score went up to:";
 let humanWon = "Human won," + " " + "Human Score went up to:";
+let roundResult;
 
-let whoScored = 0;
+const showScore = () => {
+  whoWonContainer[0].innerHTML = roundResult;
+  humanScoreContainer[0].innerHTML = "Human Score: " + humanScore;
+  computerScoreContainer[0].innerHTML = "Computer Score: " + computerScore;
+};
 
-for (let i = 0; i < 5; i++) {
-  // Computer chooses
-  const getComputerNumber = (min, max) => {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
-  const randomNumber = getComputerNumber(0, 2);
-  //console.log(randomNumber);
+const getComputerNumber = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+};
 
-  const valueForComputerNumber = () => {
-    if (randomNumber == 0) {
-      return paper;
-    } else if (randomNumber == 1) {
-      return rock;
-    }
-    return scissor;
-  };
-  getComputerChoice = valueForComputerNumber();
-  console.log(getComputerChoice);
-  // Computer chooses End
-
-  const humanChooses = Number(
-    window.prompt("Choose your weapon: 0 = Paper, 1 = Rock, 2 = Scissor"),
-  );
-
-  const valueForHumanNumber = () => {
-    if (humanChooses == 0) {
-      return paper;
-    } else if (humanChooses == 1) {
-      return rock;
-    }
-    return scissor;
-  };
-  getHumanChoice = valueForHumanNumber();
-  console.log(getHumanChoice);
-
-  const playRound = (getComputerChoice, getHumanChoice) => {
-    if (getComputerChoice == getHumanChoice) {
-      return "try again";
-    } else if (getComputerChoice == paper) {
-      if (getHumanChoice == rock) {
-        computerScore = computerScore + 1;
-        return computerWon + computerScore;
-      }
-      humanScore = humanScore + 1;
-      return humanWon + humanScore;
-    } else if (getComputerChoice == rock) {
-      if (getHumanChoice == scissor) {
-        computerScore = computerScore + 1;
-        return computerWon + computerScore;
-      }
-      humanScore = humanScore + 1;
-      return humanWon + humanScore;
-    } else if (getComputerChoice == scissor) {
-      if (getHumanChoice == paper) {
-        computerScore = computerScore + 1;
-        return computerWon + computerScore;
-      }
-      humanScore = humanScore + 1;
-      return humanWon + humanScore;
-    }
-  };
-  whoScored = playRound(getComputerChoice, getHumanChoice);
-  console.log(whoScored);
-
-  if(humanScore == computerScore){
-    console.log("Nobody won");
-  }else if(humanScore>computerScore){
-    console.log("Human won");
-  }else{
-    console.log("Computer won");
+const valueForComputerNumber = (randomNumber) => {
+  if (randomNumber == 0) {
+    return paper;
+  } else if (randomNumber == 1) {
+    return rock;
   }
-  
-}
+  return scissor;
+};
+
+const playRound = (getHumanChoice) => {
+  const randomNumber = getComputerNumber(0, 2);
+  const getComputerChoice = valueForComputerNumber(randomNumber);
+
+  if (getComputerChoice == getHumanChoice) {
+    roundResult = "try again";
+  } else if (getComputerChoice == paper) {
+    if (getHumanChoice == rock) {
+      computerScore = computerScore + 1;
+      roundResult = computerWon + computerScore;
+    } else {
+      humanScore = humanScore + 1;
+      roundResult = humanWon + humanScore;
+    }
+  } else if (getComputerChoice == rock) {
+    if (getHumanChoice == scissor) {
+      computerScore = computerScore + 1;
+      roundResult = computerWon + computerScore;
+    } else {
+      humanScore = humanScore + 1;
+      roundResult = humanWon + humanScore;
+    }
+  } else if (getComputerChoice == scissor) {
+    if (getHumanChoice == paper) {
+      computerScore = computerScore + 1;
+      roundResult = computerWon + computerScore;
+    } else {
+      humanScore = humanScore + 1;
+      roundResult = humanWon + humanScore;
+    }
+  }
+};
+
+const scissorButtons = document.getElementsByClassName("scissor");
+const rockButtons = document.getElementsByClassName("rock");
+const paperButtons = document.getElementsByClassName("paper");
+const whoWonContainer = document.getElementsByClassName("whoWonContainer");
+const humanScoreContainer = document.getElementsByClassName(
+  "humanScoreContainer",
+);
+const computerScoreContainer = document.getElementsByClassName(
+  "computerScoreContainer",
+);
+
+scissorButtons[0].addEventListener("click", () => {
+  playRound(scissor);
+  showScore();
+});
+
+rockButtons[0].addEventListener("click", () => {
+  playRound(rock);
+  showScore();
+});
+
+paperButtons[0].addEventListener("click", () => {
+  playRound(paper);
+  showScore();
+});
